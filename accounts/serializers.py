@@ -1,18 +1,22 @@
-from rest_framework import serializers
-from django.contrib.auth.models import User 
+from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from rest_framework import serializers
 
 
-# Serializer for displaying user data (profile info)
+# =========================
+# User Serializer
+# =========================
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email']
 
 
-# Serializer for user registration
+# =========================
+# Register Serializer
+# =========================
 class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True, min_length=6)
 
     class Meta:
         model = User
@@ -21,30 +25,39 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(
             username=validated_data['username'],
-            email=validated_data['email'],
+            email=validated_data.get('email'),
             password=validated_data['password']
         )
         return user
 
 
-# Serializer for user login
+# =========================
+# Login Serializer
+# =========================
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
-    password = serializers.CharField()
+    password = serializers.CharField(write_only=True)
 
     def validate(self, data):
         user = authenticate(
-            username=data.get('username'),
-            password=data.get('password')
+            username=data['username'],
+            password=data['password']
         )
+
         if not user:
             raise serializers.ValidationError("Invalid username or password")
-        return user
+
+        if not user.is_active:
+            raise serializers.ValidationError("This account is disabled")
+
+        data['user'] = user  # ✅ attach real User object
+        return data
 
 
-# Profile update serializer
+# =========================
+# Profile Update Serializer
+# =========================
 class ProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'email']
-        read_only_fields = ['id']

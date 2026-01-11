@@ -1,70 +1,67 @@
-# #from django.shortcuts import render
-
-# # Create your views here.
-# from rest_framework import generics, permissions
+# from rest_framework.viewsets import ModelViewSet
 # from .models import Listing
 # from .serializers import ListingSerializer
+# from .permissions import IsOwnerOrReadOnlyOrCanBuy
+# from django.db.models import Q
+# from rest_framework.decorators import action
+# from rest_framework.response import Response
 
-
-# # LIST + CREATE listings
-# class ListingListCreateView(generics.ListCreateAPIView):
-#     queryset = Listing.objects.all()
+# class ListingViewSet(ModelViewSet):
+#     queryset = Listing.objects.all().order_by('-created_at')
 #     serializer_class = ListingSerializer
-#     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+#     permission_classes = [IsOwnerOrReadOnlyOrCanBuy]
 
-#     # Automatically attach logged-in user when creating a listing
+#     def get_queryset(self):
+#         queryset = super().get_queryset()
+#         category = self.request.query_params.get('category')
+#         if category:
+#             queryset = queryset.filter(category__iexact=category)
+#         search = self.request.query_params.get('search')
+#         if search:
+#             queryset = queryset.filter(
+#                 Q(title__icontains=search) |
+#                 Q(location__icontains=search)
+#             )
+#         return queryset
+
+#     # Save the logged-in user as owner
 #     def perform_create(self, serializer):
 #         serializer.save(owner=self.request.user)
 
+#     @action(detail=True, methods=['post'])
+#     def buy(self, request, pk=None):
+#         listing = self.get_object()
+#         # Payment/buy logic here
+#         return Response({"message": "Purchase successful"})
+    
 
-# # GET - UPDATE - DELETE a single listing
-# class ListingDetailView(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = Listing.objects.all()
-#     serializer_class = ListingSerializer
-#     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
-
-from rest_framework import generics, permissions
-from django.db.models import Q
-from .models import Listing
+from rest_framework.viewsets import ModelViewSet
+from .models import Listing, ListingImage
 from .serializers import ListingSerializer
+from .permissions import IsOwnerOrReadOnlyOrCanBuy
 
 
-# ---------------------------------------------------------
-# LIST + SEARCH + FILTER + CREATE
-# ---------------------------------------------------------
-class ListingListCreateView(generics.ListCreateAPIView):
+class ListingViewSet(ModelViewSet):
+    queryset = Listing.objects.all().order_by('-created_at')
     serializer_class = ListingSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnlyOrCanBuy]
 
-    def get_queryset(self):
-        queryset = Listing.objects.all()
-
-        # --------- FILTER BY CATEGORY ---------
-        category = self.request.query_params.get('category')
-        if category:
-            queryset = queryset.filter(category__iexact=category)
-
-        # --------- SEARCH BY TITLE + LOCATION ---------
-        search = self.request.query_params.get('search')
-        if search:
-            queryset = queryset.filter(
-                Q(title__icontains=search) |
-                Q(location__icontains=search)
-            )
-
-        return queryset
-
-    # Automatically assign logged-in user as owner
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        listing = serializer.save(owner=self.request.user)
+
+        images = self.request.FILES.getlist('images')
+        for image in images:
+            ListingImage.objects.create(listing=listing, image=image)
 
 
-# ---------------------------------------------------------
-# DETAIL VIEW (GET, UPDATE, DELETE)
-# ---------------------------------------------------------
-class ListingDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Listing.objects.all()
-    serializer_class = ListingSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    
+
+
+
+
+
+
+

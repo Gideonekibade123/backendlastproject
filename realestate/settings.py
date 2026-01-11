@@ -1,8 +1,19 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv(BASE_DIR / ".env")
+
+
+PAYSTACK_PUBLIC_KEY = os.getenv("PAYSTACK_PUBLIC_KEY")
+PAYSTACK_SECRET_KEY = os.getenv("PAYSTACK_SECRET_KEY")
+
+if not PAYSTACK_SECRET_KEY:
+    raise ValueError("PAYSTACK_PUBLIC_KEY and PAYSTACK_SECRET_KEY must be set in the .env file")
 
 
 # Quick-start development settings - unsuitable for production
@@ -30,9 +41,20 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'listings.apps.ListingsConfig',
     'rest_framework',
+    'corsheaders',
+    'rest_framework.authtoken',
+    'payments',
 ]
 
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+    ],
+}
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -41,6 +63,17 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+
+from corsheaders.defaults import default_headers
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    "authorization",
+]
+
 
 ROOT_URLCONF = 'realestate.urls'
 
@@ -107,8 +140,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'IMAGE')
+#STATIC_URL = 'static/'
+#MEDIA_ROOT = os.path.join(BASE_DIR, 'IMAGE')
+STATIC_URL = '/static/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 
 #email
@@ -119,8 +154,12 @@ EMAIL_HOST_PASSWORD = 'Geki12345@'
 EMAIL_PORT = '587'
 EMAIL_USE_TLS =True
 
+#Paystack config
+
+
 # Default primary key field
 # https://docs.djangoproject.com/en/6.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/IMAGE/'
+
