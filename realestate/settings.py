@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from datetime import timedelta
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -42,16 +43,36 @@ INSTALLED_APPS = [
     'listings.apps.ListingsConfig',
     'rest_framework',
     'corsheaders',
-    'rest_framework.authtoken',
+    # 'rest_framework.authtoken',
+    "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
     'payments',
 ]
 
 
+# REST_FRAMEWORK = {
+#     "DEFAULT_AUTHENTICATION_CLASSES": [
+#         "rest_framework.authentication.TokenAuthentication",
+#     ],
+
+
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.TokenAuthentication",
-    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
 }
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}
+
+
+
+
+
+
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -144,6 +165,7 @@ USE_TZ = True
 #STATIC_URL = 'static/'
 #MEDIA_ROOT = os.path.join(BASE_DIR, 'IMAGE')
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 

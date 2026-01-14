@@ -90,11 +90,10 @@ class ListingSerializer(serializers.ModelSerializer):
             'images',        # multiple images
             'owner',         # backend username
             'seller_name',   # for frontend display
+            'is_sold',
             'created_at',
         ]
-        read_only_fields = ['id', 'owner', 'seller_name', 'created_at']
-
-
+        read_only_fields = ['id', 'owner', 'seller_name', 'is_sold', 'created_at']
 
 
 
