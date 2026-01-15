@@ -26,8 +26,9 @@ class Payment(models.Model):
         "listings.Listing",
         on_delete=models.CASCADE,
         related_name="payments",
-        null=True,
-        blank=True
+       
+       # null=True,
+       # blank=True
     )
 
     payment_type = models.CharField(

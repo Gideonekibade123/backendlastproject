@@ -4,5 +4,8 @@ from .views import PaystackInitializeAPIView, PaystackVerifyAPIView
 
 urlpatterns = [
     path("paystack/init/", PaystackInitializeAPIView.as_view(), name="paystack-init"),
+
+
     path("paystack/verify/<str:reference>/", PaystackVerifyAPIView.as_view(), name="paystack-verify"),
+
 ]
