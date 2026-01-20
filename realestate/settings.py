@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-6njj80&q2@=vux7e_rn#2&4ms(all8s_%b4^9y=s!@8#4m5mv!
 
 DEBUG = False 
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["https://backendlastproject.onrender.com"]
 
 
 # Application definition
@@ -168,6 +168,12 @@ USE_TZ = True
 
 #STATIC_URL = 'static/'
 #MEDIA_ROOT = os.path.join(BASE_DIR, 'IMAGE')
+
+
+# Static files (CSS, JS, admin)
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
