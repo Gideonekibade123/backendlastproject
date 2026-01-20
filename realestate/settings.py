@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-6njj80&q2@=vux7e_rn#2&4ms(all8s_%b4^9y=s!@8#4m5mv!
 DEBUG = False 
 
 ALLOWED_HOSTS = [ "backendlastproject.onrender.com",
-    "backendlastproject-1.onrender.com",]
+    "backendlastproject-1.onrender.com", "backendlastproject-assets.onrender.com",]
 
 
 # Application definition
