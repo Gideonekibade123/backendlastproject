@@ -1,9 +1,8 @@
-#from django.db import models
-
-# Create your models here.
+from listings.models import PropertyListing
 
 from django.db import models
 from django.contrib.auth.models import User
+
     
 # Optional Profile model to store extra info about users
 class Profile(models.Model):
