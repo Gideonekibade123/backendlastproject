@@ -42,9 +42,6 @@ CSRF_TRUSTED_ORIGINS = [
 
 
 
-
-
-
 # ALLOWED_HOSTS = [ "backendlastproject.onrender.com"]
 
 #"backendlastproject-1.onrender.com", "backendlastproject-assets.onrender.com",
