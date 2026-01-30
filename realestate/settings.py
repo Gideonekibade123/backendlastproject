@@ -4,17 +4,18 @@ from dotenv import load_dotenv
 from datetime import timedelta
 
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv(BASE_DIR / ".env")
 
 
-PAYSTACK_PUBLIC_KEY = os.getenv("PAYSTACK_PUBLIC_KEY")
-PAYSTACK_SECRET_KEY = os.getenv("PAYSTACK_SECRET_KEY")
+PAYSTACK_PUBLIC_KEY = os.getenv("PAYSTACK_PUBLIC_KEY", "")
+PAYSTACK_SECRET_KEY = os.getenv("PAYSTACK_SECRET_KEY", "")
 
-if not PAYSTACK_SECRET_KEY:
-    raise ValueError("PAYSTACK_PUBLIC_KEY and PAYSTACK_SECRET_KEY must be set in the .env file")
+# if not PAYSTACK_SECRET_KEY:
+#     raise ValueError("PAYSTACK_PUBLIC_KEY and PAYSTACK_SECRET_KEY must be set in the .env file")
 
 
 # Quick-start development settings - unsuitable for production
@@ -37,6 +38,7 @@ ALLOWED_HOSTS = [
 
 CSRF_TRUSTED_ORIGINS = [
     "https://backendlastproject.onrender.com",
+    "https://realestatefronten.netlify.app",
     ]
 
 
@@ -106,7 +108,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True
+#CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://realestatefronten.netlify.app",
+]
 CORS_ALLOW_CREDENTIALS = True
 
 
@@ -140,11 +145,19 @@ WSGI_APPLICATION = 'realestate.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+import dj_database_url
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=os.environ.get("DATABASE_URL")
+    )
 }
 
 
@@ -193,14 +206,15 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-MEDIA_ROOT = '/media'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 
 #email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'gekibade@gmail.com'
-EMAIL_HOST_PASSWORD =   'lczw bsct hfpb ufth'    #Geki12345@ 
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+#EMAIL_HOST_PASSWORD =   'lczw bsct hfpb ufth'    #Geki12345@ 
 EMAIL_PORT = '587'
 EMAIL_USE_TLS =True
 
@@ -211,5 +225,5 @@ EMAIL_USE_TLS =True
 # https://docs.djangoproject.com/en/6.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-MEDIA_URL = '/IMAGE/'
+#MEDIA_URL = '/IMAGE/'
 
