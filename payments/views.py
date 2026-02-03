@@ -22,12 +22,23 @@ class PaystackInitializeAPIView(APIView):
         )
 
         headers = {"Authorization": f"Bearer {settings.PAYSTACK_SECRET_KEY}"}
+
+        # payload = {
+        #     "email": request.user.email,
+        #     "amount": amount,
+        #     "reference": payment.reference,
+        #     "callback_url": f"http://127.0.0.1:5500/payment_success.html?reference={payment.reference}"
+        # }
+         
         payload = {
-            "email": request.user.email,
-            "amount": amount,
-            "reference": payment.reference,
-            "callback_url": f"http://127.0.0.1:5500/payment_success.html?reference={payment.reference}"
-        }
+    "email": request.user.email,
+    "amount": amount,
+    "reference": payment.reference,
+    "callback_url": f"https://realestatefrontend.netlify.app/payment_successful.html?reference={payment.reference}"  # <-- new
+         }
+
+
+
 
         r = requests.post("https://api.paystack.co/transaction/initialize", headers=headers, json=payload)
         response_data = r.json()
