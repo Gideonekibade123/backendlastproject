@@ -31,8 +31,8 @@ DEBUG = False
 ALLOWED_HOSTS = [
     "backendlastproject.onrender.com",
     ".onrender.com",
-    "127.0.0.1",
-    "localhost",
+    # "127.0.0.1",
+    # "localhost",
 ]
 
 
@@ -200,8 +200,8 @@ STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 
 #email
