@@ -24,6 +24,28 @@ User = get_user_model()
 # =========================
 # User Registration
 # =========================
+# class RegisterView(APIView):
+#     permission_classes = [AllowAny]
+
+#     def post(self, request):
+#         serializer = RegisterSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         user = serializer.save()
+
+#         user.is_active = False
+#         user.save()
+
+#         try:
+#             send_verification_email(user, request)
+#         except Exception as e:
+#             print(f"Failed to send verification email: {e}")
+
+#         return Response({
+#             "message": "Registration successful! Please check your email to activate your account.",
+#         }, status=status.HTTP_201_CREATED)
+
+
+
 class RegisterView(APIView):
     permission_classes = [AllowAny]
 
@@ -32,16 +54,13 @@ class RegisterView(APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
 
-        user.is_active = False
-        user.save()
-
-        try:
-            send_verification_email(user, request)
-        except Exception as e:
-            print(f"Failed to send verification email: {e}")
-
+        # Generate JWT tokens immediately
+        refresh = RefreshToken.for_user(user)
         return Response({
-            "message": "Registration successful! Please check your email to activate your account.",
+            "message": "Registration successful!",
+            "user": UserSerializer(user).data,
+            "refresh": str(refresh),
+            "access": str(refresh.access_token)
         }, status=status.HTTP_201_CREATED)
 
 
