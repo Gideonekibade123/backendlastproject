@@ -30,6 +30,7 @@ class ListingSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['id', 'owner', 'seller_name', 'is_sold', 'created_at']
 
+
 class MessageSerializer(serializers.ModelSerializer):
     sender_name = serializers.CharField(source='sender.username', read_only=True)
     receiver_name = serializers.CharField(source='receiver.username', read_only=True)
@@ -37,17 +38,10 @@ class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
         fields = [
-            'id',
-            'listing',
-            'sender',
-            'receiver',
-            'sender_name',
-            'receiver_name',
-            'content',
-            'timestamp',
-            'is_read',
+            'id', 'listing', 'sender', 'receiver',
+            'sender_name', 'receiver_name', 'content', 'timestamp', 'is_read',
         ]
-        read_only_fields = ['id', 'sender', 'receiver', 'timestamp']
+        read_only_fields = ['id', 'sender', 'receiver', 'listing', 'timestamp']
 
 
 
