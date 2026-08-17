@@ -1,5 +1,6 @@
+# from mailbox import Message
 from rest_framework import serializers
-from .models import Listing, ListingImage
+from .models import Listing, ListingImage, Message
 
 class ListingImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -28,6 +29,25 @@ class ListingSerializer(serializers.ModelSerializer):
             'created_at',
         ]
         read_only_fields = ['id', 'owner', 'seller_name', 'is_sold', 'created_at']
+
+class MessageSerializer(serializers.ModelSerializer):
+    sender_name = serializers.CharField(source='sender.username', read_only=True)
+    receiver_name = serializers.CharField(source='receiver.username', read_only=True)
+
+    class Meta:
+        model = Message
+        fields = [
+            'id',
+            'listing',
+            'sender',
+            'receiver',
+            'sender_name',
+            'receiver_name',
+            'content',
+            'timestamp',
+            'is_read',
+        ]
+        read_only_fields = ['id', 'sender', 'timestamp']
 
 
 

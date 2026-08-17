@@ -5,22 +5,17 @@ from datetime import timedelta
 from corsheaders.defaults import default_headers
 import dj_database_url
 
-# ------------------------------------------------
+
 # Base Directory
-# ------------------------------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv(BASE_DIR / ".env")
 
-# ------------------------------------------------
 # Environment Variables
-# ------------------------------------------------
 PAYSTACK_PUBLIC_KEY = os.getenv("PAYSTACK_PUBLIC_KEY", "")
 PAYSTACK_SECRET_KEY = os.getenv("PAYSTACK_SECRET_KEY", "")
 
-# ------------------------------------------------
 # Security
-# ------------------------------------------------
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
@@ -38,9 +33,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-# ------------------------------------------------
 # Installed Apps
-# ------------------------------------------------
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -62,27 +55,23 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt.token_blacklist",
 ]
 
-# ------------------------------------------------
 # Django REST Framework
-# ------------------------------------------------
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
 }
 
-# ------------------------------------------------
 # JWT Settings
-# ------------------------------------------------
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
-# ------------------------------------------------
+
 # Middleware
-# ------------------------------------------------
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -95,12 +84,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-
-# CORS Settings
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:5173",
-#     "https://estatehhub.netlify.app",  # ✅ add this
-# ]
 
 FRONTEND_URL = "https://estatehhub.netlify.app"
 
@@ -147,15 +130,6 @@ TEMPLATES = [
 # WSGI
 WSGI_APPLICATION = 'realestate.wsgi.application'
 
-# Database
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-# import dj_database_url
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
@@ -205,46 +179,6 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-# Email Configuration
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_HOST_USER = 'gekibade@gmail.com'
-# EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "gekibade@gmail.com")
-# FRONTEND_URL = os.getenv("FRONTEND_URL", "https://estatehhub.netlify.app")
-
-
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_HOST_USER = 'gekibade@gmail.com'
-# EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-# EMAIL_PORT = 465        # ✅ changed from 587 to 465
-# EMAIL_USE_TLS = False   # ✅ changed to False
-# EMAIL_USE_SSL = True    # ✅ add this
-# DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "gekibade@gmail.com")
-# FRONTEND_URL = os.getenv("FRONTEND_URL", "https://estatehhub.netlify.app")
-
-
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_HOST_USER = 'gekibade@gmail.com'
-# EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-# EMAIL_PORT = 587        # ✅ change from 465 to 587
-# EMAIL_USE_TLS = True    # ✅ change to True
-# EMAIL_USE_SSL = False   # ✅ change to False
-# DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "gekibade@gmail.com")
-
-
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_HOST_USER = 'gekibade@gmail.com'
-# EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_USE_SSL = False
-# DEFAULT_FROM_EMAIL = 'EstateHub <gekibade@gmail.com>'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

@@ -2,9 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
-# =========================
+
 # Custom User Model
-# =========================
 class CustomUser(AbstractUser):
     is_verified = models.BooleanField(default=False)  # ✅ email verification
 
@@ -12,9 +11,8 @@ class CustomUser(AbstractUser):
         return self.email
 
 
-# =========================
+
 # Profile Model
-# =========================
 class Profile(models.Model):
     user = models.OneToOneField(
         CustomUser,
