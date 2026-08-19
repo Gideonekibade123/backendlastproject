@@ -23,7 +23,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = [
     "backendlastproject.onrender.com",
-    ".onrender.com",
+    ".onrender.com", "127.0.0.1", "localhost"
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -89,6 +89,7 @@ FRONTEND_URL = "https://estatehhub.netlify.app"
 
 CORS_ALLOWED_ORIGINS = [
     "https://estatehhub.netlify.app",
+    "http://localhost:5173",
 ]
 
 CORS_ALLOW_CREDENTIALS = False

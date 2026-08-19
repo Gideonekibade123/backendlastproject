@@ -21,28 +21,6 @@ from .serializers import (
 User = get_user_model()
 
 
-# =========================
-# User Registration
-# =========================
-# class RegisterView(APIView):
-#     permission_classes = [AllowAny]
-
-#     def post(self, request):
-#         serializer = RegisterSerializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         user = serializer.save()
-
-#         user.is_active = False
-#         user.save()
-
-#         try:
-#             send_verification_email(user, request)
-#         except Exception as e:
-#             print(f"Failed to send verification email: {e}")
-
-#         return Response({
-#             "message": "Registration successful! Please check your email to activate your account.",
-#         }, status=status.HTTP_201_CREATED)
 
 
 
@@ -54,19 +32,25 @@ class RegisterView(APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
 
-        # Generate JWT tokens immediately
-        refresh = RefreshToken.for_user(user)
+        user.is_active = False
+        user.save()
+
+        try:
+            send_verification_email(user, request)
+        except Exception as e:
+            print(f"Failed to send verification email: {e}")
+            return Response(
+                {"detail": "Registration succeeded but the verification email failed to send. Please contact support."},
+                status=status.HTTP_201_CREATED
+            )
+
         return Response({
-            "message": "Registration successful!",
-            "user": UserSerializer(user).data,
-            "refresh": str(refresh),
-            "access": str(refresh.access_token)
+            "message": "Registration successful! Please check your email to activate your account.",
         }, status=status.HTTP_201_CREATED)
 
 
-# =========================
 # Activate Account
-# =========================
+
 class ActivateAccountView(APIView):
     permission_classes = [AllowAny]
 
@@ -95,9 +79,9 @@ class ActivateAccountView(APIView):
         )
 
 
-# =========================
+
 # User Login — Email based
-# =========================
+
 class LoginView(APIView):
     permission_classes = [AllowAny]
 
@@ -141,9 +125,9 @@ class LoginView(APIView):
         }, status=status.HTTP_200_OK)
 
 
-# =========================
+
 # User Logout
-# =========================
+
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -162,9 +146,9 @@ class LogoutView(APIView):
         )
 
 
-# =========================
+
 # User Profile (GET + UPDATE)
-# =========================
+
 class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -187,9 +171,9 @@ class ProfileView(APIView):
         }, status=status.HTTP_200_OK)
 
 
-# =========================
+
 # Change Password
-# =========================
+
 class ChangePasswordView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -223,9 +207,9 @@ class ChangePasswordView(APIView):
         )
 
 
-# =========================
+
 # Forgot Password
-# =========================
+
 class ForgotPasswordView(APIView):
     permission_classes = [AllowAny]
 
@@ -249,9 +233,9 @@ class ForgotPasswordView(APIView):
         )
 
 
-# =========================
+
 # Reset Password
-# =========================
+
 class ResetPasswordView(APIView):
     permission_classes = [AllowAny]
 

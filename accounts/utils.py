@@ -5,11 +5,11 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 
 
+
 def send_verification_email(user, request):
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     token = default_token_generator.make_token(user)
-    activation_url = f"{request.scheme}://{request.get_host()}/api/activate/{uid}/{token}/"
-    # activation_url = f"{settings.FRONTEND_URL}/activate/{uid}/{token}/"
+    activation_url = f"{settings.FRONTEND_URL}/activate/{uid}/{token}/"
 
     send_mail(
         subject="Activate your EstateHub account",
@@ -56,3 +56,5 @@ If you did not request this, ignore this email.
         recipient_list=[user.email],
         fail_silently=False,
     )
+
+
