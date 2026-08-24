@@ -207,6 +207,7 @@ EMAIL_USE_SSL = False
 
 EMAIL_HOST_USER = 'gekibade@gmail.com'
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_TIMEOUT = 5
 
 DEFAULT_FROM_EMAIL = 'EstateHub <gekibade@gmail.com>'
 
