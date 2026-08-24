@@ -56,6 +56,21 @@ class ListingDetailAPIView(APIView):
         serializer = ListingSerializer(listing)
         return Response(serializer.data)
 
+    # def put(self, request, pk):
+    #     listing = self.get_object(pk)
+    #     self.check_object_permissions(request, listing)
+    #     if listing.is_sold:
+    #         return Response(
+    #             {"error": "Sold listings cannot be updated."},
+    #             status=status.HTTP_400_BAD_REQUEST
+    #         )
+    #     serializer = ListingSerializer(listing, data=request.data, partial=True)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
     def put(self, request, pk):
         listing = self.get_object(pk)
         self.check_object_permissions(request, listing)
@@ -67,8 +82,13 @@ class ListingDetailAPIView(APIView):
         serializer = ListingSerializer(listing, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
+            images = request.FILES.getlist("images")
+            for image in images:
+                ListingImage.objects.create(listing=listing, image=image)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
     def delete(self, request, pk):
         listing = self.get_object(pk)
